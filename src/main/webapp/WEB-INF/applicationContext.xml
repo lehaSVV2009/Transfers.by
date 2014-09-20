@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	   		http://www.springframework.org/schema/context
+	   		http://www.springframework.org/schema/context/spring-context-3.1.xsd
+			http://www.springframework.org/schema/mvc
+			http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+
+    <!-- SOLVE JSON OUTPUT TROUBLES -->
+
+    <mvc:annotation-driven/>
+
+    <!-- SCAN JAVA CLASSES BY ANNOTATIONS -->
+
+    <context:component-scan base-package="by.transfers.controller"/>
+    <context:component-scan base-package="by.transfers.entity"/>
+    <context:component-scan base-package="by.transfers.service"/>
+
+    <!-- SET VIEW RESOLVER -->
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+    </bean>
+
+    <!-- APACHE TILES -->
+
+    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/layouts/layouts.xml</value>
+            </list>
+        </property>
+
+    </bean>
+
+
+    <beans:bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <beans:property name="prefix" value="/WEB-INF/views/"/>
+        <beans:property name="suffix" value=".jsp"/>
+    </beans:bean>
+
+    <beans:bean id="messageSource"
+                class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <beans:property name="basename" value="classpath:messages"/>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="defaultEncoding" value="Windows-1251"/>
+        <property name="cacheSeconds" value="5"/>
+    </beans:bean>
+
+    <beans:bean id="localeResolver"
+                class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <beans:property name="defaultLocale" value="ru"/>
+        <beans:property name="cookieName" value="myAppLocaleCookie"/>
+        <beans:property name="cookieMaxAge" value="3600"/>
+    </beans:bean>
+
+    <mvc:interceptors>
+        <beans:bean
+                class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <beans:property name="paramName" value="locale"/>
+        </beans:bean>
+    </mvc:interceptors>
+
+</beans>
